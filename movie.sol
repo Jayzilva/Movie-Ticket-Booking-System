@@ -74,4 +74,27 @@ contract MovieBooking {
 
         return false;
     }
+
+    // Function to get the seat numbers that are available in a movie
+    function getAvailableSeats(uint256 _movieId) public view returns (uint256[] memory) {
+        require(_movieId < movies.length, "Movie with the given ID does not exist");
+        Movie storage movie = movies[_movieId];
+
+        uint256[] memory availableSeats = new uint256[](movie.seatCount);
+        uint256 count = 0;
+
+        for (uint256 i = 0; i < movie.seatCount; i++) {
+            if (!movie.seats[i]) {
+                availableSeats[count] = i + 1; // Seat numbers start from 1
+                count++;
+            }
+        }
+
+        // Resize the array to remove any unused slots
+        assembly {
+            mstore(availableSeats, count)
+        }
+
+        return availableSeats;
+    }
 }
