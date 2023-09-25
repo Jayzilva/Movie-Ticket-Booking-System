@@ -10,13 +10,13 @@ import React, { useEffect, useState } from "react";
 
 function AdminAddMovies() {
   const address = useAddress();
-  const contractAdd = "0x8105589c0658cD725Dc8067A6001059D94f31deA";
+  const contractAdd = "0xE8c03Fc11e83aA2bdadFFDE8B16bBFdEf02965c8";
   const { contract } = useContract(contractAdd);
   const { mutateAsync: createMovie } = useContractWrite(
     contract,
     "createMovie"
   );
-  const [id, setId] = useState(0);
+  const [id, setId] = useState("");
   const [name, setName] = useState("");
 
 
@@ -28,7 +28,7 @@ function AdminAddMovies() {
       console.info("contract call successs", data);
       setId("");
       setName("");
-      setAddr("");
+
     } catch (err) {
       const errorMessage = err.message.match(/Reason: (.*)/);
         alert(errorMessage);

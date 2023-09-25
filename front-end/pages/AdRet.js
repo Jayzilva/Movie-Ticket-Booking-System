@@ -1,9 +1,14 @@
-import AdminLayout from '../components/AdminLayout'
-import { useAddress, useContract, useContractRead, useContractWrite } from "@thirdweb-dev/react"
-import React, { useEffect, useState } from 'react';
+import AdminLayout from "../components/AdminLayout";
+import {
+  useAddress,
+  useContract,
+  useContractRead,
+  useContractWrite,
+} from "@thirdweb-dev/react";
+import React, { useEffect, useState } from "react";
 
 
-function AdminViewMovies() {
+function AdminAddRet() {
   const address = useAddress();
   const contractAdd = "0x8105589c0658cD725Dc8067A6001059D94f31deA";
   const { contract } = useContract(contractAdd);
@@ -14,7 +19,6 @@ function AdminViewMovies() {
   const [id, setId] = useState(0);
   const [name, setName] = useState("");
   const [addr, setAddr] = useState("");
-  //const { data: session } = useSession();
 
   const handleComplaint = async () => {
     try {
@@ -34,47 +38,14 @@ function AdminViewMovies() {
 
     }
   };
-/*
-  useEffect(() => {
-    if (viewMovies) {
-      setSneakers(viewMovies);
-    }
-  }, [viewMovies]);
-*/
+
   return (
     <div>
-       
+    
           <>
-          <AdminLayout/>
-          <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-1">
-        <table >
-      <thead>
-        <tr  class="border-b border-gray-100 dark:border-gray-300 bg-gray-100">
-          <th scope="col" class="px-6 py-3">ID</th>
-          <th scope="col" class="px-6 py-3">Movie Name</th>
-          <th scope="col" class="px-6 py-3">Number of Seats</th>
-          <th scope="col" class="px-6 py-3">Availability</th>
-          <th scope="col" class="px-6 py-3">Availabile Seats</th>          
-        </tr>
-      </thead>
-      <tbody>
-  {/*    {movies.map((movie) => (
-          <tr key={movie.id}  class="border-b border-gray-500 dark:border-gray-700">
-            <td class="px-6 py-4">{movie.id.toString()}</td>
-            <td class="px-6 py-4">{movie.movieName}</td>
-            <td class="px-6 py-4">{movie.seats.toString()}</td>
-            <td class="px-6 py-4">{movie.availability.toString()}</td>
-  
-          </tr>
-        ))} */}  
-      </tbody>
-    </table>
-        </div>
-
-        <hr/>
-          </>
-
-          <h1 class="text-4xl font-bold">Add Retailers</h1>
+          <AdminLayout />
+      <div class="w-96 m-10">
+      <h1 class="text-4xl font-bold">Add Retailers</h1>
       <br/>
       <div class="mb-6">
               <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Retailer ID</label>
@@ -96,9 +67,12 @@ function AdminViewMovies() {
         >
           Add Retailer
         </button>
+      </div>
+          </>
+        
       
     </div>
-  )
+  );
 }
 
-export default AdminViewMovies
+export default AdminAddRet;
