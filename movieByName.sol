@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 contract MovieBooking {
@@ -115,26 +115,4 @@ contract MovieBooking {
 
         return availableSeats;
     }
-
-// Function to get all available movie names
-function getAllAvailableMovies() public view returns (string[] memory) {
-    uint256 movieCount = movies.length;
-    string[] memory availableMovieNames = new string[](movieCount);
-    uint256 availableMovieCount = 0;
-
-    for (uint256 i = 0; i < movieCount; i++) {
-        if (movies[i].isAvailable) {
-            availableMovieNames[availableMovieCount] = movies[i].name;
-            availableMovieCount++;
-        }
-    }
-
-    // Resize the array to remove any unused slots
-    assembly {
-        mstore(availableMovieNames, availableMovieCount)
-    }
-
-    return availableMovieNames;
-}
-
 }
