@@ -12,9 +12,9 @@ function AdminAddMovies() {
   const address = useAddress();
   const contractAdd = "0x8105589c0658cD725Dc8067A6001059D94f31deA";
   const { contract } = useContract(contractAdd);
-  const { mutateAsync: addRetailer } = useContractWrite(
+  const { mutateAsync: createMovie } = useContractWrite(
     contract,
-    "addRetailer"
+    "createMovie"
   );
   const [id, setId] = useState(0);
   const [name, setName] = useState("");
@@ -22,7 +22,7 @@ function AdminAddMovies() {
 
   const handleComplaint = async () => {
     try {
-      const data = await addRetailer([id, name, addr]);
+      const data = await createMovie([id, name]);
 
       alert(`Retailer Added`);
       console.info("contract call successs", data);
