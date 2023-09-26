@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract Ticket {
+contract TicketX {
 
     address public owner;
 
@@ -17,55 +17,47 @@ contract Ticket {
         _;
     }
 
-    struct movie {
+    struct Movie {
         uint256 id;
         address sneakerRegisteredBy;
         string movieName;
-        uint256 seats;
-        bool availability;
+        uint256 totalSeats;
+        uint256 availableSeats;
+        bool[] seats;
+        bool isAvailable;
         uint256 blockNumber;
     }
 
-    mapping(uint256 => movie) public Movies;
+    mapping(uint256 => Movie) public movies;
     uint256 public totalMovies;
+    uint256 private nextMovieId = 1; // Initialize the next movie ID to 1
 
-    /*
-        event sneakerFiled(
-        uint256 id,
-        address sneakerRegisteredBy,
-        string modelno,
-        string color,
-        string size
-        
-    );
-    */
+    event SeatsBooked(uint256 movieId, uint256 seatsBooked);
 
-    function fcreateMovie(uint256 _id, string memory _movieName) public onlyOwner
-    {
-        require(Movies[_id].id == 0, "Id is already used");
-        movie storage newTicket = Movies[_id];
-        newTicket.id = _id;
-        newTicket.sneakerRegisteredBy = msg.sender;
-        newTicket.movieName = _movieName;
-        newTicket.seats = 20;
-        newTicket.availability = true;
-        newTicket.blockNumber = block.number;
+    function createMovie(string memory _movieName) public onlyOwner {
+        uint256 newMovieId = nextMovieId; // Get the next movie ID
+        nextMovieId++; // Increment the next movie ID for the next movie
 
+        Movie storage newMovie = movies[newMovieId];
+        newMovie.id = newMovieId;
+        newMovie.sneakerRegisteredBy = msg.sender;
+        newMovie.movieName = _movieName;
+        newMovie.totalSeats = 20;
+        newMovie.availableSeats = 20;
+        newMovie.blockNumber = block.number;
         totalMovies++;
-        //emit sneakerFiled(_id, msg.sender, _movieName, _seats);
-        
     }
 
-    function viewMovies() public view returns (movie[] memory) {
-        movie[] memory allMovies = new movie[](totalMovies);
+    // View movies with details
+    function viewMovies() public view returns (Movie[] memory) {
+        Movie[] memory allMovies = new Movie[](totalMovies);
         uint256 counter = 0;
         for (uint256 i = 1; i <= totalMovies; i++) {
-            if (Movies[i].id != 0) {
-                allMovies[counter] = Movies[i];
+            if (movies[i].id != 0) {
+                allMovies[counter] = movies[i];
                 counter++;
             }
         }
         return allMovies;
     }
-
 }
