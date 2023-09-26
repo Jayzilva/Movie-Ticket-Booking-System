@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract Ticket {
+contract TicketX {
 
     address public owner;
+    string public name;
 
     constructor() {
         owner = msg.sender; 
+        name = "";
     }
     
     modifier onlyOwner() {
@@ -66,6 +68,13 @@ contract Ticket {
             }
         }
         return allMovies;
+    }
+
+
+
+
+    function setName(string memory _newName) public {
+        name = _newName;
     }
 
 }
