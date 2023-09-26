@@ -1,47 +1,44 @@
-import {
-  ConnectWallet,
-  useAddress,
-  useContract,
-  useContractData,
-  Web3Button,
-} from "@thirdweb-dev/react";
-import { useState } from "react";
+import UserLayout from '../components/UserLayout'
+import { useAddress, useContract, useContractRead, useContractWrite } from "@thirdweb-dev/react"
+import React, { useEffect, useState } from 'react';
 
 function AdminViewMovies() {
-  const address = useAddress();
-  const contractAddress = "0x458B5d00507FE04a623D3Fbb6893f0A675f1E869";
-  const [input, setInput] = useState("");
-  const { contract } = useContract(contractAddress);
-  //const { data, isLoading } = useContractData(contract, "getTodo");
 
+  const address = useAddress();
+  const contractAdd ="0x31C1Ce23bc7A0687ad23C9028DDE4Ec518Ee3D91";
+  const { contract } = useContract(contractAdd);
+  const { data: viewMovies } = useContractRead(contract, "viewMovies");
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    if (viewMovies) {
+      setMovies(viewMovies);
+    }
+  }, [viewMovies]);
 
 
   return (
-    <div>
-      
-      <div >
-      
-        <>
-          <div>
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Enter todo"
-            />
+    <>
+    <UserLayout/>
+    <table >
 
-            <Web3Button
-              contractAddress={contractAddress}
-              action={(contract) => contract.call("createMovie", input)}
-              accentColor="#1ce"
-            >
-              Set Todo
-            </Web3Button>
-          </div>
+    <tr >
+      {movies.map((Movie) => (
+      <>
+        <td class="px-2 py-3 font-mono text-2xl font-bold text-center">{Movie.movieName}</td>
+      </>
+        ))}
+    </tr>
+    <tr class="border-b border-gray-500 dark:border-gray-700">
+      {movies.map((Movie) => (
+      <>
+        <td class="px-2 py-4"><img class=" h-60 w-44" src={Movie.movieImg}></img></td>
+      </>
+        ))}
+    </tr>
 
-        </>
-             
-            </div>
-    </div>
+</table>
+</>
   );
 }
 
