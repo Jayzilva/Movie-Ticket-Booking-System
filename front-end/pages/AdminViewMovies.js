@@ -5,16 +5,16 @@ import React, { useEffect, useState } from 'react';
 
 function AdminViewMovies() {
   const address = useAddress();
-  const contractAdd ="0x8105589c0658cD725Dc8067A6001059D94f31deA";
+  const contractAdd ="0xe05080802EDaadE3A9edb7B18b537e232fA9C795";
   const { contract } = useContract(contractAdd);
-  const { data: viewAllSneakers } = useContractRead(contract, "viewAllSneakers");
-  const [sneakers, setSneakers] = useState([]);
+  const { data: viewMovies } = useContractRead(contract, "viewMovies");
+  const [movies, setMovies] = useState([]);
 
   useEffect(() => {
-    if (viewAllSneakers) {
-      setSneakers(viewAllSneakers);
+    if (viewMovies) {
+      setMovies(viewMovies);
     }
-  }, [viewAllSneakers]);
+  }, [viewMovies]);
 
   return (
     <div>
@@ -26,35 +26,30 @@ function AdminViewMovies() {
       <thead>
         <tr  class="border-b border-gray-100 dark:border-gray-300 bg-gray-100">
           <th scope="col" class="px-6 py-3">ID</th>
-          <th scope="col" class="px-6 py-3">Model No</th>
-          <th scope="col" class="px-6 py-3">Color</th>
-          <th scope="col" class="px-6 py-3">Size</th>
-          <th scope="col" class="px-6 py-3">Block No</th>
-          <th scope="col" class="px-6 py-3">Retailer</th>
-          <th scope="col" class="px-6 py-3">Approved by Manufacturer</th>
-          <th scope="col" class="px-6 py-3">Distributor</th>
-          <th scope="col" class="px-6 py-3">Product Delivered </th>
+          <th scope="col" class="px-6 py-3">Movie Name</th>
+          <th scope="col" class="px-6 py-3">Total Seats</th>
+          <th scope="col" class="px-6 py-3">Available Seats</th>
+          <th scope="col" class="px-6 py-3">isAvailable</th>
           
           
         </tr>
       </thead>
       <tbody>
-        {sneakers.map((sneaker) => (
-          <tr key={sneaker.id}  class="border-b border-gray-500 dark:border-gray-700">
-            <td class="px-6 py-4">{sneaker.id.toString()}</td>
-            <td class="px-6 py-4">{sneaker.modelno}</td>
-            <td class="px-6 py-4">{sneaker.color}</td>
-            <td class="px-6 py-4">{sneaker.size}</td>
-            <td class="px-6 py-4">{sneaker.blockNumber.toString()}</td>
-            <td class="px-6 py-4">{sneaker.retailerName}</td>
-            <td class="px-6 py-4">{sneaker.isApproved.toString()}</td>
-            <td class="px-6 py-4">{sneaker.distributerName}</td>
-            <td class="px-6 py-4">{sneaker.isDelivered.toString()}</td>
+        {movies.map((Movie) => (
+          <tr key={Movie.id}  class="border-b border-gray-500 dark:border-gray-700">
+            <td class="px-6 py-4">{Movie.id.toString()}</td>
+          <td class="px-6 py-4">{Movie.movieName}</td> 
+            <td class="px-6 py-4">{Movie.totalSeats.toString()}</td>
+            <td class="px-6 py-4">{Movie.availableSeats.toString()}</td>
+            <td class="px-6 py-4">{Movie.isAvailable.toString()}</td>
+
           </tr>
         ))}
       </tbody>
     </table>
         </div>
+
+        
           </>
 
     </div>
