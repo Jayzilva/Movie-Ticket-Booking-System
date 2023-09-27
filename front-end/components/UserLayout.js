@@ -9,7 +9,7 @@ export default function UserLayout() {
 <nav className="flex items-center justify-between flex-wrap bg-gradient-to-r from-gray-900 to-gray-800 p-10"> 
 <div className="flex items-center flex-shrink-0 text-white mr-7">
 
-  <span className="font-semibold text-1xl tracking-tight font-semibold text-3xl tracking-tight">BIX Cinema </span>
+  <span className="font-semibold text-1xl tracking-tight font-semibold text-3xl tracking-tight"> <Link  href="/">BIX Cinema </Link></span>
 </div>
 <div className="block lg:hidden">
   <button className="flex items-center px-3 py-2 border rounded text-slate-200 border-teal-400 hover:text-white hover:border-white">

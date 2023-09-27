@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract TicketBooking {
+contract TicketBook {
 
     address public owner;
 
@@ -82,8 +82,7 @@ contract TicketBooking {
     }
 
 
-        // Function to book a seat in a movie
-        // Function to book a seat in a movie
+       
 function bookSeat(uint256 _movieId, uint256 _seatNumber) public {
     require(_movieId != 0, "Movie does not exist");
     Movie storage movie = movies[_movieId];
@@ -105,7 +104,7 @@ function bookSeat(uint256 _movieId, uint256 _seatNumber) public {
 }
 
 
-    // Function to check if all seats are booked in a movie
+   
     function _allSeatsBooked(uint256 _movieId) internal view returns (bool) {
         Movie storage movie = movies[_movieId];
         for (uint256 i = 0; i < movie.seatCount; i++) {
@@ -116,7 +115,6 @@ function bookSeat(uint256 _movieId, uint256 _seatNumber) public {
         return true;
     }
 
-       // Function to check if a seat is available in a movie
     function isSeatAvailable(uint256 _movieId, uint256 _seatNumber) public view returns (bool) {
         require(_movieId != 0, "Movie does not exist");
         Movie storage movie = movies[_movieId];
@@ -128,7 +126,7 @@ function bookSeat(uint256 _movieId, uint256 _seatNumber) public {
         return false;
     }
 
-    // Function to get the seat numbers that are available in a movie
+    
     function getAvailableSeats(uint256 _movieId) public view returns (uint256[] memory) {
         require(_movieId != 0, "Movie does not exist");
         Movie storage movie = movies[_movieId];

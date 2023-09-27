@@ -35,9 +35,6 @@ function AdminViewMovies() {
   </>
     ))}
 </tr>
-</table>
-
-<table >
 <tr class="border-b border-gray-500 dark:border-gray-700">
   {movies.map((Movie) => (
   <>
