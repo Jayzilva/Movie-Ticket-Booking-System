@@ -26,3 +26,19 @@
 - Counting the total number of movies
 - Viewing details about every movie
 - Viewing details about available movies
+
+
+## Features ##
+- There are 2 main user interfaces including 
+  > User
+  > Admin
+
+## How to run ##
+
+**To deploy the Smart contract to Thirdweb platform**
+`cd back-end`
+`yarn deploy`
+
+**To run the application**
+`cd front-end`
+`yarn run`
