@@ -27,14 +27,19 @@
 - Viewing details about every movie
 - Viewing details about available movies
 
-<img src="assets/ticket.PNG" alt="Alt text" title="Optional title">
+<img src="assets/ticket.PNG" alt="Alt text" >
 
 
 ## Features ##
 - This include cryptocurrency wallet integration - Metamask
 - There are 2 main user interfaces including 
   > User
+<img src="assets/user.PNG" alt="Alt text" >
+
   > Admin
+<img src="assets/Admin.PNG" alt="Alt text" >
+
+---
 
 ## How to run ##
 
