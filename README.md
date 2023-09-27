@@ -1,5 +1,44 @@
-# Movie-Ticket-Booking-System
+# Movie Ticket Booking System - Web3 #
+
+## Technologies Used ##
+
+**Front-end**
+- NextJs
+- Tailwind CSS
+- Thirdweb React SDK
+
+**Back-end**
+- Solidty
+- Hardhat
+
+**Blockchain**
+- Polygon - Mumbai
+- Metamask Wallet
+- Thirdweb platform
+
+## Features ##
+**Functions of the smart contract**
+- Creating a movie
+- Retrieving movie details
+- Booking a seat
+- Retrieving available seats
+- Checking seat availability
+- Counting the total number of movies
+- Viewing details about every movie
+- Viewing details about available movies
 
 
+## Features ##
+- There are 2 main user interfaces including 
+  > User
+  > Admin
 
-https://m.media-amazon.com/images/M/MV5BMDBmYTZjNjUtN2M1MS00MTQ2LTk2ODgtNzc2M2QyZGE5NTVjXkEyXkFqcGdeQXVyNzAwMjU2MTY@._V1_.jpg
+## How to run ##
+
+**To deploy the Smart contract to Thirdweb platform**
+`cd back-end`
+`yarn deploy`
+
+**To run the application**
+`cd front-end`
+`yarn run`
