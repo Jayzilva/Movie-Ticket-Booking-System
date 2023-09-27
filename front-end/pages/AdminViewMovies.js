@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 
 function AdminViewMovies() {
   const address = useAddress();
-  const contractAdd ="0xe05080802EDaadE3A9edb7B18b537e232fA9C795";
+  const contractAdd ="0xA7Ed3dA7A0132111Ad1AB8aB337606C78E52Ca0b";
   const { contract } = useContract(contractAdd);
   const { data: viewMovies } = useContractRead(contract, "viewMovies");
   const [movies, setMovies] = useState([]);
@@ -39,8 +39,8 @@ function AdminViewMovies() {
           <tr key={Movie.id}  class="border-b border-gray-500 dark:border-gray-700">
             <td class="px-6 py-4">{Movie.id.toString()}</td>
           <td class="px-6 py-4">{Movie.movieName}</td> 
-            <td class="px-6 py-4">{Movie.totalSeats.toString()}</td>
-            <td class="px-6 py-4">{Movie.availableSeats.toString()}</td>
+            <td class="px-6 py-4">{Movie.seatCount.toString()}</td>
+            <td class="px-6 py-4">{Movie.availableSeatCount.toString()}</td>
             <td class="px-6 py-4">{Movie.isAvailable.toString()}</td>
 
           </tr>

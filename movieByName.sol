@@ -1,68 +1,105 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract MovieBooking {
-    // Struct to represent a movie
+contract TicketBooking {
+
+    address public owner;
+
+    constructor() {
+        owner = msg.sender; 
+    }
+    
+    modifier onlyOwner() {
+        require(
+            msg.sender == owner,
+            "You are not the owner of this smart contract"
+        );
+        _;
+    }
+
     struct Movie {
         uint256 id;
-        string name;
-        uint256 seatCount;
+        string movieName;
+        string movieImg;
+        uint256 seatCount; 
+        uint256 availableSeatCount;
         bool[] seats;
+        bool isAvailable;
+        mapping(address => uint256) ticketsBooked;
+    }
+
+    struct MovieInfo {
+        uint256 id;
+        string movieName;
+        string movieImg;
+        uint256 seatCount;
+        uint256 availableSeatCount;
         bool isAvailable;
     }
 
-    // Array to store the movies
-    Movie[] public movies;
+    mapping(uint256 => Movie) public movies;
+    uint256 public totalMovies;
+    uint256 private nextMovieId = 1;
 
-    // Mapping to associate movie names with movie IDs
-    mapping(string => uint256) private movieNameToId;
-
-    // Event to notify when a seat is booked
+    event SeatsBooked(uint256 movieId, uint256 seatsBooked);
     event SeatBooked(uint256 movieId, uint256 seatNumber);
 
-    // Function to create a new movie
-    function createMovie(uint256 _id, string memory _name) public {
-        require(_id > 0, "Movie ID must be greater than 0");
-        require(bytes(_name).length > 0, "Movie name cannot be empty");
+    function createMovie(string memory _movieName, string memory _movieImg) public onlyOwner {
+        uint256 newMovieId = nextMovieId;
+        nextMovieId++;
 
-        // Check if the movie name already exists
-        require(movieNameToId[_name] == 0, "Movie with this name already exists");
-
-        Movie memory newMovie = Movie({
-            id: _id,
-            name: _name,
-            seatCount: 5, // Default seat count
-            seats: new bool[](20), // Initialize an array of seats with the default count
-            isAvailable: true
-        });
-
-        movies.push(newMovie);
-        movieNameToId[_name] = movies.length; // Store the movie ID by name
+        Movie storage newMovie = movies[newMovieId];
+        newMovie.id = newMovieId;
+        newMovie.movieName = _movieName;
+        newMovie.movieImg = _movieImg;
+        newMovie.seatCount = 20;
+        newMovie.seats = new bool[](20);
+        newMovie.availableSeatCount = 20;
+        newMovie.isAvailable = true;
+        totalMovies++;
     }
 
-    // Function to book a seat in a movie based on the movie name
-    function bookSeat(string memory _movieName, uint256 _seatNumber) public {
-        // Check if the movie name exists in the mapping
-        require(movieNameToId[_movieName] > 0, "Movie with the given name does not exist");
-        uint256 movieId = movieNameToId[_movieName] - 1; // Subtract 1 to get the correct movie index
+    function viewMovies() public view returns (MovieInfo[] memory) {
+        MovieInfo[] memory allMovies = new MovieInfo[](totalMovies);
+        uint256 counter = 0;
+        for (uint256 i = 1; i <= totalMovies; i++) {
+            if (movies[i].id != 0) {
+                allMovies[counter] = MovieInfo({
+                    id: movies[i].id,
+                    movieName: movies[i].movieName,
+                    movieImg: movies[i].movieImg,
+                    seatCount: movies[i].seatCount,
+                    availableSeatCount: movies[i].availableSeatCount,
+                    isAvailable: movies[i].isAvailable
+                });
+                counter++;
+            }
+        }
+        return allMovies;
+    }
 
-        Movie storage movie = movies[movieId];
+
+    
+    function bookSeat(uint256 _movieId, uint256 _seatNumber) public {
+        require(_movieId != 0, "Movie does not exist");
+        Movie storage movie = movies[_movieId];
 
         require(movie.isAvailable, "Movie is not available for booking");
         require(_seatNumber > 0 && _seatNumber <= movie.seatCount, "Invalid seat number");
         require(!movie.seats[_seatNumber - 1], "Seat is already booked");
+        require(movie.ticketsBooked[msg.sender] < 5, "You can't book more than 5 tickets for this movie");
 
         movie.seats[_seatNumber - 1] = true;
+        movie.availableSeatCount--;
+        movie.ticketsBooked[msg.sender]++;
 
-        // Check if all seats are booked
-        if (_allSeatsBooked(movieId)) {
+        if (_allSeatsBooked(_movieId)) {
             movie.isAvailable = false;
         }
 
-        emit SeatBooked(movieId, _seatNumber);
+        emit SeatBooked(_movieId, _seatNumber);
     }
 
-    // Function to check if all seats are booked in a movie
     function _allSeatsBooked(uint256 _movieId) internal view returns (bool) {
         Movie storage movie = movies[_movieId];
         for (uint256 i = 0; i < movie.seatCount; i++) {
@@ -73,14 +110,9 @@ contract MovieBooking {
         return true;
     }
 
-    // Function to check if a seat is available in a movie based on the movie name
-    function isSeatAvailable(string memory _movieName, uint256 _seatNumber) public view returns (bool) {
-        // Check if the movie name exists in the mapping
-        if (movieNameToId[_movieName] == 0) {
-            return false;
-        }
-        uint256 movieId = movieNameToId[_movieName] - 1; // Subtract 1 to get the correct movie index
-        Movie storage movie = movies[movieId];
+    function isSeatAvailable(uint256 _movieId, uint256 _seatNumber) public view returns (bool) {
+        require(_movieId != 0, "Movie does not exist");
+        Movie storage movie = movies[_movieId];
 
         if (movie.isAvailable && !movie.seats[_seatNumber - 1]) {
             return true;
@@ -89,26 +121,20 @@ contract MovieBooking {
         return false;
     }
 
-    // Function to get the seat numbers that are available in a movie based on the movie name
-    function getAvailableSeats(string memory _movieName) public view returns (uint256[] memory) {
-        // Check if the movie name exists in the mapping
-        if (movieNameToId[_movieName] == 0) {
-            return new uint256[](0);
-        }
-        uint256 movieId = movieNameToId[_movieName] - 1; // Subtract 1 to get the correct movie index
-        Movie storage movie = movies[movieId];
+    function getAvailableSeats(uint256 _movieId) public view returns (uint256[] memory) {
+        require(_movieId != 0, "Movie does not exist");
+        Movie storage movie = movies[_movieId];
 
         uint256[] memory availableSeats = new uint256[](movie.seatCount);
         uint256 count = 0;
 
         for (uint256 i = 0; i < movie.seatCount; i++) {
             if (!movie.seats[i]) {
-                availableSeats[count] = i + 1; // Seat numbers start from 1
+                availableSeats[count] = i + 1;
                 count++;
             }
         }
 
-        // Resize the array to remove any unused slots
         assembly {
             mstore(availableSeats, count)
         }

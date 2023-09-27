@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract TicketM {
+contract TicketBooking {
 
     address public owner;
 
@@ -21,8 +21,8 @@ contract TicketM {
         uint256 id;
         string movieName;
         string movieImg;
-        uint256 totalSeats;
-        uint256 availableSeats;
+        uint256 seatCount; 
+        uint256 availableSeatCount;
         bool[] seats;
         bool isAvailable;
         
@@ -32,7 +32,12 @@ contract TicketM {
     uint256 public totalMovies;
     uint256 private nextMovieId = 1; // Initialize the next movie ID to 1
 
+    mapping(address => uint256) ticketsBooked;
+
     event SeatsBooked(uint256 movieId, uint256 seatsBooked);
+
+        // Event to notify when a seat is booked
+    event SeatBooked(uint256 movieId, uint256 seatNumber); //
 
     function createMovie(string memory _movieName, string memory _movieImg) public onlyOwner {
         uint256 newMovieId = nextMovieId; // Get the next movie ID
@@ -42,8 +47,9 @@ contract TicketM {
         newMovie.id = newMovieId;
         newMovie.movieName = _movieName;
         newMovie.movieImg = _movieImg;
-        newMovie.totalSeats = 20;
-        newMovie.availableSeats = 20;
+        newMovie.seatCount = 20;
+        newMovie.seats = new bool[](20);
+        newMovie.availableSeatCount = 20;
 
         newMovie.isAvailable = true; // Initialize the movie as available
         totalMovies++;
@@ -75,23 +81,73 @@ contract TicketM {
         return availableMovies;
     }
 
-    // Book seats for a movie
-    function bookSeats(uint256 movieId, uint256 numSeats) public onlyOwner {
-        Movie storage movie = movies[movieId];
-        require(movie.id != 0, "Movie does not exist");
-        require(movie.isAvailable, "Movie is not available");
-        require(numSeats > 0 && numSeats <= movie.availableSeats, "Invalid number of seats");
-        
-        for (uint256 i = 0; i < numSeats; i++) {
-            movie.seats.push(true);
+
+        // Function to book a seat in a movie
+        // Function to book a seat in a movie
+function bookSeat(uint256 _movieId, uint256 _seatNumber) public {
+    require(_movieId != 0, "Movie does not exist");
+    Movie storage movie = movies[_movieId];
+
+    require(movie.isAvailable, "Movie is not available for booking");
+    require(_seatNumber > 0 && _seatNumber <= movie.seatCount, "Invalid seat number");
+    require(!movie.seats[_seatNumber - 1], "Seat is already booked");
+    
+
+    movie.seats[_seatNumber - 1] = true;
+    movie.availableSeatCount--; // Decrement available seat count
+
+    // Check if all seats are booked
+    if (_allSeatsBooked(_movieId)) {
+        movie.isAvailable = false;
+    }
+
+    emit SeatBooked(_movieId, _seatNumber);
+}
+
+
+    // Function to check if all seats are booked in a movie
+    function _allSeatsBooked(uint256 _movieId) internal view returns (bool) {
+        Movie storage movie = movies[_movieId];
+        for (uint256 i = 0; i < movie.seatCount; i++) {
+            if (!movie.seats[i]) {
+                return false;
+            }
         }
-        
-        movie.availableSeats -= numSeats;
-        
-        if (movie.availableSeats == 0) {
-            movie.isAvailable = false; // All seats have been booked
+        return true;
+    }
+
+       // Function to check if a seat is available in a movie
+    function isSeatAvailable(uint256 _movieId, uint256 _seatNumber) public view returns (bool) {
+        require(_movieId != 0, "Movie does not exist");
+        Movie storage movie = movies[_movieId];
+
+        if (movie.isAvailable && !movie.seats[_seatNumber - 1]) {
+            return true;
         }
-        
-        emit SeatsBooked(movieId, numSeats);
+
+        return false;
+    }
+
+    // Function to get the seat numbers that are available in a movie
+    function getAvailableSeats(uint256 _movieId) public view returns (uint256[] memory) {
+        require(_movieId != 0, "Movie does not exist");
+        Movie storage movie = movies[_movieId];
+
+        uint256[] memory availableSeats = new uint256[](movie.seatCount);
+        uint256 count = 0;
+
+        for (uint256 i = 0; i < movie.seatCount; i++) {
+            if (!movie.seats[i]) {
+                availableSeats[count] = i + 1; // Seat numbers start from 1
+                count++;
+            }
+        }
+
+        // Resize the array to remove any unused slots
+        assembly {
+            mstore(availableSeats, count)
+        }
+
+        return availableSeats;
     }
 }
