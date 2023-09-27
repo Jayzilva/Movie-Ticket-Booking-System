@@ -6,7 +6,7 @@ import Link from 'next/link';
 function AdminViewMovies() {
 
   const address = useAddress();
-  const contractAdd ="0xA7Ed3dA7A0132111Ad1AB8aB337606C78E52Ca0b";
+  const contractAdd ="0xD06B8C3c14cc55629Bd6a1e71ddBF0323C88AE36";
   const { contract } = useContract(contractAdd);
   const { data: viewAvailableMovies } = useContractRead(contract, "viewAvailableMovies");
   const [movies, setMovies] = useState([]);
