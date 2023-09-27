@@ -27,6 +27,8 @@
 - Viewing details about every movie
 - Viewing details about available movies
 
+<img src="assets/ticket.PNG" alt="Alt text" title="Optional title">
+
 
 ## Features ##
 - This include cryptocurrency wallet integration - Metamask
