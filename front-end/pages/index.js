@@ -8,14 +8,14 @@ function AdminViewMovies() {
   const address = useAddress();
   const contractAdd ="0xA7Ed3dA7A0132111Ad1AB8aB337606C78E52Ca0b";
   const { contract } = useContract(contractAdd);
-  const { data: viewMovies } = useContractRead(contract, "viewMovies");
+  const { data: viewAvailableMovies } = useContractRead(contract, "viewAvailableMovies");
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
-    if (viewMovies) {
-      setMovies(viewMovies);
+    if (viewAvailableMovies) {
+      setMovies(viewAvailableMovies);
     }
-  }, [viewMovies]);
+  }, [viewAvailableMovies]);
 
 
   return (
