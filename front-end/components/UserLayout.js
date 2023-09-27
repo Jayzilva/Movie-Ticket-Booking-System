@@ -18,8 +18,8 @@ export default function UserLayout() {
 </div>
 <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto ">
   <div className="text-sm lg:flex-grow bg-gray-700 hover:bg-slate-950 text-white font-bold py-2 px-4 rounded mr-96 text-center">
-    <Link  href="/" className=" text-lg font-medium block mt-5 lg:inline-block lg:mt-0 text-slate-200 hover:text-white mr-4">
-      But Tickets
+    <Link  href="/BuyTickets" className=" text-lg font-medium block mt-5 lg:inline-block lg:mt-0 text-slate-200 hover:text-white mr-4">
+      Tickets
     </Link >
   </div>
   <div>
