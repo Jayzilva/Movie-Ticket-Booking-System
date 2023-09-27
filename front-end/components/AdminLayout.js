@@ -24,7 +24,7 @@ export default function AdminLayout() {
   </div>
   <div className="text-sm lg:flex-grow bg-gray-700 hover:bg-slate-950 text-white font-bold py-2 px-4 rounded mr-58 text-center  m-2">
     <Link  href="/" className=" text-lg font-medium block mt-5 lg:inline-block lg:mt-0 text-slate-200 hover:text-white mr-4 ">
-      But Tickets
+      Add New Movie
     </Link >
   </div>
   <div>

@@ -29,6 +29,7 @@
 
 
 ## Features ##
+- This include cryptocurrency wallet integration - Metamask
 - There are 2 main user interfaces including 
   > User
   > Admin
